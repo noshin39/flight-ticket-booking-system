@@ -1,0 +1,26 @@
+import java.util.Arrays;
+
+public class Reservation {
+    private String reservationID;
+    private User user;
+    private Flight flight;
+    private int seatsBooked;
+    private String[] passengerDetails;
+
+    public Reservation(String reservationID, User user, Flight flight, int seatsBooked) {
+        this.reservationID = reservationID;
+        this.user = user;
+        this.flight = flight;
+        this.seatsBooked = seatsBooked;
+    }
+
+    public void addPassengerDetails(String[] passengerDetails) {
+        this.passengerDetails = passengerDetails;
+    }
+
+    public void displayDetails() {
+        System.out.println("Reservation ID: " + reservationID);
+        System.out.println("Flight: " + flight.getFlightNumber());
+        System.out.println("Passengers: " + Arrays.toString(passengerDetails));
+    }
+}
