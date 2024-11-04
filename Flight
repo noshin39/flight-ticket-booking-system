@@ -1,0 +1,52 @@
+import java.util.Arrays;
+
+public class Flight {
+    private String flightNumber;
+    private String origin;
+    private String destination;
+    private String date;
+    private String time;
+    private boolean[][] seats = new boolean[5][20];
+
+    public Flight(String flightNumber, String origin, String destination, String date, String time) {
+        this.flightNumber = flightNumber;
+        this.origin = origin;
+        this.destination = destination;
+        this.date = date;
+        this.time = time;
+    }
+
+    public boolean checkAndReserveSeats(int requestedSeats) {
+        int consecutiveSeats = 0;
+        for (int i = 0; i < seats.length; i++) {
+            for (int j = 0; j < seats[i].length; j++) {
+                if (!seats[i][j]) {
+                    consecutiveSeats++;
+                    if (consecutiveSeats == requestedSeats) {
+                        for (int k = j; k >= requestedSeats; k--) {
+                            seats[i][k] = true;
+                        }
+                        return true;
+                    }
+                } else {
+                    consecutiveSeats = 0;
+                }
+            }
+        }
+        return false;
+    }
+
+    public String getFlightNumber() {
+        return flightNumber;
+    }
+
+    public void printSeatLayout() {
+        System.out.println("Seat Layout:");
+        for (boolean[] row : seats) {
+            for (boolean seat : row) {
+                System.out.print(seat ? "[X]" : "[ ]");
+            }
+            System.out.println();
+        }
+    }
+}
