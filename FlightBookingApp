@@ -1,0 +1,126 @@
+import java.util.Scanner;
+
+public class FlightBookingApp {
+    private static Scanner scanner = new Scanner(System.in);
+    private FlightBookingSystem bookingSystem = new FlightBookingSystem();
+
+    public void start() {
+        while (true) {
+            System.out.println("Welcome to Flight Booking System");
+            System.out.println("1. Log in");
+            System.out.println("2. Exit");
+            System.out.print("Select an option: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+
+            if (choice == 1) {
+                logIn();
+            } else if (choice == 2) {
+                System.out.println("Exiting...");
+                bookingSystem.shutdown();
+                break;
+            } else {
+                System.out.println("Invalid option.");
+            }
+        }
+    }
+
+    private void logIn() {
+        System.out.print("Enter First Name: ");
+        String firstName = scanner.nextLine();
+        System.out.print("Enter Last Name: ");
+        String lastName = scanner.nextLine();
+        
+        User user = new User(firstName + " " + lastName);
+        bookingSystem.setCurrentUser(user);
+        showMenu();
+    }
+
+    private void showMenu() {
+        while (true) {
+            System.out.println("\nMenu");
+            System.out.println("1. Search Flight");
+            System.out.println("2. View Booking");
+            System.out.println("3. Log out");
+            System.out.print("Select an option: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (choice) {
+                case 1 -> searchFlight();
+                case 2 -> viewBooking();
+                case 3 -> {
+                    bookingSystem.setCurrentUser(null);
+                    System.out.println("Logged out.");
+                    return;
+                }
+                default -> System.out.println("Invalid option.");
+            }
+        }
+    }
+
+    private void searchFlight() {
+        String[] destinations = {"New York", "Los Angeles", "Chicago"};
+        String[] dates = {"2024-11-10", "2024-11-12", "2024-11-15"};
+        String[] times = {"10:00 AM", "02:30 PM", "06:00 PM"};
+
+        System.out.println("\nSelect Destination:");
+        for (int i = 0; i < destinations.length; i++) {
+            System.out.println((i + 1) + ". " + destinations[i]);
+        }
+        System.out.print("Enter choice: ");
+        int destinationChoice = scanner.nextInt();
+        scanner.nextLine();
+        String selectedDestination = destinations[destinationChoice - 1];
+
+        System.out.println("\nSelect Date:");
+        for (int i = 0; i < dates.length; i++) {
+            System.out.println((i + 1) + ". " + dates[i]);
+        }
+        System.out.print("Enter choice: ");
+        int dateChoice = scanner.nextInt();
+        scanner.nextLine();
+        String selectedDate = dates[dateChoice - 1];
+
+        System.out.println("\nSelect Time:");
+        for (int i = 0; i < times.length; i++) {
+            System.out.println((i + 1) + ". " + times[i]);
+        }
+        System.out.print("Enter choice: ");
+        int timeChoice = scanner.nextInt();
+        scanner.nextLine();
+        String selectedTime = times[timeChoice - 1];
+
+        System.out.print("\nEnter number of people: ");
+        int numberOfPeople = scanner.nextInt();
+        scanner.nextLine();
+
+        System.out.println("\nFlight Details:");
+        System.out.println("Destination: " + selectedDestination);
+        System.out.println("Date: " + selectedDate);
+        System.out.println("Time: " + selectedTime);
+        System.out.println("Number of Seats: " + numberOfPeople);
+
+        System.out.print("\nConfirm booking? (yes/no): ");
+        String confirm = scanner.nextLine();
+
+        if (confirm.equalsIgnoreCase("yes")) {
+            Flight selectedFlight = bookingSystem.findFlight(selectedDestination, selectedDate, selectedTime);
+            if (selectedFlight != null) {
+                bookingSystem.bookFlight(selectedFlight, numberOfPeople);
+            } else {
+                System.out.println("No available flights match the selection.");
+            }
+        } else {
+            System.out.println("Returning to menu.");
+        }
+    }
+
+    private void viewBooking() {
+        bookingSystem.viewBooking();
+    }
+
+    public static void main(String[] args) {
+        new FlightBookingApp().start();
+    }
+}
