@@ -71,7 +71,7 @@ public class FlightBookingApp {
     }
 
     public static void searchFlight() {
-        String[] destinations = {"New York", "Los Angeles", "Chicago"};
+        String[] destinations = {"New York", "Los Angeles", "Chicago"}; //Date,Time,place was taken from Chatgpt
         String[] dates = {"2024-11-10", "2024-11-12", "2024-11-15"};
         String[] times = {"10:00 AM", "02:30 PM", "06:00 PM"};
 
