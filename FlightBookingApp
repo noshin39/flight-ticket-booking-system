@@ -2,41 +2,51 @@ import java.util.Scanner;
 
 public class FlightBookingApp {
     private static Scanner scanner = new Scanner(System.in);
-    private FlightBookingSystem bookingSystem = new FlightBookingSystem();
+    private static FlightBookingSystem bookingSystem = new FlightBookingSystem();
+    private static User currentUser;
 
-    public void start() {
+    public static void main(String[] args) {
         while (true) {
-            System.out.println("Welcome to Flight Booking System");
-            System.out.println("1. Log in");
-            System.out.println("2. Exit");
-            System.out.print("Select an option: ");
-            int choice = scanner.nextInt();
-            scanner.nextLine();
+            start();
 
-            if (choice == 1) {
-                logIn();
-            } else if (choice == 2) {
+            if (currentUser != null) {
+                showMenu();
+            } else {
                 System.out.println("Exiting...");
                 bookingSystem.shutdown();
                 break;
-            } else {
-                System.out.println("Invalid option.");
             }
         }
     }
 
-    private void logIn() {
+    public static void start() {
+        System.out.println("Welcome to Flight Booking System");
+        System.out.println("1. Log in");
+        System.out.println("2. Exit");
+        System.out.print("Select an option: ");
+        int choice = scanner.nextInt();
+        scanner.nextLine();
+
+        if (choice == 1) {
+            logIn();
+        } else if (choice == 2) {
+            currentUser = null;
+        } else {
+            System.out.println("Invalid option.");
+        }
+    }
+
+    public static void logIn() {
         System.out.print("Enter First Name: ");
         String firstName = scanner.nextLine();
         System.out.print("Enter Last Name: ");
         String lastName = scanner.nextLine();
         
-        User user = new User(firstName + " " + lastName);
-        bookingSystem.setCurrentUser(user);
-        showMenu();
+        currentUser = new User(firstName + " " + lastName);
+        bookingSystem.setCurrentUser(currentUser);
     }
 
-    private void showMenu() {
+    public static void showMenu() {
         while (true) {
             System.out.println("\nMenu");
             System.out.println("1. Search Flight");
@@ -50,6 +60,7 @@ public class FlightBookingApp {
                 case 1 -> searchFlight();
                 case 2 -> viewBooking();
                 case 3 -> {
+                    currentUser = null;
                     bookingSystem.setCurrentUser(null);
                     System.out.println("Logged out.");
                     return;
@@ -59,7 +70,7 @@ public class FlightBookingApp {
         }
     }
 
-    private void searchFlight() {
+    public static void searchFlight() {
         String[] destinations = {"New York", "Los Angeles", "Chicago"};
         String[] dates = {"2024-11-10", "2024-11-12", "2024-11-15"};
         String[] times = {"10:00 AM", "02:30 PM", "06:00 PM"};
@@ -116,11 +127,7 @@ public class FlightBookingApp {
         }
     }
 
-    private void viewBooking() {
+    public static void viewBooking() {
         bookingSystem.viewBooking();
-    }
-
-    public static void main(String[] args) {
-        new FlightBookingApp().start();
     }
 }
