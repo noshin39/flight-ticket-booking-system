@@ -1,0 +1,8 @@
+public class FlightBookingSystem {
+    private User currentUser;
+
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
+    }
+
+   
