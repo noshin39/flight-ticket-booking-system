@@ -1,5 +1,3 @@
-import java.util.Arrays;
-
 public class Reservation {
     private String reservationID;
     private User user;
