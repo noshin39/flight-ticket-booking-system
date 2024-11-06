@@ -27,6 +27,7 @@ public class Passenger {
         return passportNumber;
     }
 
+    @Override
     public String toString() {
         return "Name: " + name + ", Age: " + age + ", Gender: " + gender + ", Passport: " + passportNumber;
     }
