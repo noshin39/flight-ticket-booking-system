@@ -3,50 +3,40 @@ import java.util.Scanner;
 public class FlightBookingApp {
     private static Scanner scanner = new Scanner(System.in);
     private static FlightBookingSystem bookingSystem = new FlightBookingSystem();
-    private static User currentUser;
 
     public static void main(String[] args) {
         while (true) {
-            start();
+            System.out.println("Welcome to Flight Booking System");
+            System.out.println("1. Log in");
+            System.out.println("2. Exit");
+            System.out.print("Select an option: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
 
-            if (currentUser != null) {
-                showMenu();
-            } else {
+            if (choice == 1) {
+                logIn();
+            } else if (choice == 2) {
                 System.out.println("Exiting...");
                 bookingSystem.shutdown();
                 break;
+            } else {
+                System.out.println("Invalid option.");
             }
         }
     }
 
-    public static void start() {
-        System.out.println("Welcome to Flight Booking System");
-        System.out.println("1. Log in");
-        System.out.println("2. Exit");
-        System.out.print("Select an option: ");
-        int choice = scanner.nextInt();
-        scanner.nextLine();
-
-        if (choice == 1) {
-            logIn();
-        } else if (choice == 2) {
-            currentUser = null;
-        } else {
-            System.out.println("Invalid option.");
-        }
-    }
-
-    public static void logIn() {
+    private static void logIn() {
         System.out.print("Enter First Name: ");
         String firstName = scanner.nextLine();
         System.out.print("Enter Last Name: ");
         String lastName = scanner.nextLine();
         
-        currentUser = new User(firstName + " " + lastName);
-        bookingSystem.setCurrentUser(currentUser);
+        User user = new User(firstName + " " + lastName);
+        bookingSystem.setCurrentUser(user);
+        showMenu();
     }
 
-    public static void showMenu() {
+    private static void showMenu() {
         while (true) {
             System.out.println("\nMenu");
             System.out.println("1. Search Flight");
@@ -54,13 +44,12 @@ public class FlightBookingApp {
             System.out.println("3. Log out");
             System.out.print("Select an option: ");
             int choice = scanner.nextInt();
-            scanner.nextLine();
+            scanner.nextLine(); // Consume newline
 
             switch (choice) {
                 case 1 -> searchFlight();
                 case 2 -> viewBooking();
                 case 3 -> {
-                    currentUser = null;
                     bookingSystem.setCurrentUser(null);
                     System.out.println("Logged out.");
                     return;
@@ -70,8 +59,8 @@ public class FlightBookingApp {
         }
     }
 
-    public static void searchFlight() {
-        String[] destinations = {"New York", "Los Angeles", "Chicago"}; //Date,Time,place was taken from Chatgpt
+    private static void searchFlight() {
+        String[] destinations = {"New York", "Los Angeles", "Chicago"};
         String[] dates = {"2024-11-10", "2024-11-12", "2024-11-15"};
         String[] times = {"10:00 AM", "02:30 PM", "06:00 PM"};
 
@@ -81,7 +70,7 @@ public class FlightBookingApp {
         }
         System.out.print("Enter choice: ");
         int destinationChoice = scanner.nextInt();
-        scanner.nextLine();
+        scanner.nextLine(); // Consume newline
         String selectedDestination = destinations[destinationChoice - 1];
 
         System.out.println("\nSelect Date:");
@@ -90,7 +79,7 @@ public class FlightBookingApp {
         }
         System.out.print("Enter choice: ");
         int dateChoice = scanner.nextInt();
-        scanner.nextLine();
+        scanner.nextLine(); // Consume newline
         String selectedDate = dates[dateChoice - 1];
 
         System.out.println("\nSelect Time:");
@@ -99,12 +88,12 @@ public class FlightBookingApp {
         }
         System.out.print("Enter choice: ");
         int timeChoice = scanner.nextInt();
-        scanner.nextLine();
+        scanner.nextLine(); // Consume newline
         String selectedTime = times[timeChoice - 1];
 
         System.out.print("\nEnter number of people: ");
         int numberOfPeople = scanner.nextInt();
-        scanner.nextLine();
+        scanner.nextLine(); // Consume newline
 
         System.out.println("\nFlight Details:");
         System.out.println("Destination: " + selectedDestination);
@@ -118,7 +107,25 @@ public class FlightBookingApp {
         if (confirm.equalsIgnoreCase("yes")) {
             Flight selectedFlight = bookingSystem.findFlight(selectedDestination, selectedDate, selectedTime);
             if (selectedFlight != null) {
-                bookingSystem.bookFlight(selectedFlight, numberOfPeople);
+                Reservation reservation = new Reservation("R123", bookingSystem.getCurrentUser(), selectedFlight, numberOfPeople);
+
+                for (int i = 0; i < numberOfPeople; i++) {
+                    System.out.print("\nEnter details for passenger " + (i + 1) + ": \n");
+                    System.out.print("Enter Name: ");
+                    String name = scanner.nextLine();
+                    System.out.print("Enter Age: ");
+                    int age = scanner.nextInt();
+                    scanner.nextLine(); // Consume newline
+                    System.out.print("Enter Gender: ");
+                    String gender = scanner.nextLine();
+                    System.out.print("Enter Passport Number: ");
+                    String passportNumber = scanner.nextLine();
+
+                    Passenger passenger = new Passenger(name, age, gender, passportNumber);
+                    reservation.addPassenger(passenger);
+                }
+
+                reservation.printPassengerDetails();
             } else {
                 System.out.println("No available flights match the selection.");
             }
@@ -127,7 +134,7 @@ public class FlightBookingApp {
         }
     }
 
-    public static void viewBooking() {
+    private static void viewBooking() {
         bookingSystem.viewBooking();
     }
 }
