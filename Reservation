@@ -2,23 +2,29 @@ public class Reservation {
     private String reservationID;
     private User user;
     private Flight flight;
-    private int seatsBooked;
-    private String[] passengerDetails;
+    private Passenger[] passengers;
+    private int passengerCount = 0;
 
-    public Reservation(String reservationID, User user, Flight flight, int seatsBooked) {
+    public Reservation(String reservationID, User user, Flight flight, int maxPassengers) {
         this.reservationID = reservationID;
         this.user = user;
         this.flight = flight;
-        this.seatsBooked = seatsBooked;
+        this.passengers = new Passenger[maxPassengers];
     }
 
-    public void addPassengerDetails(String[] passengerDetails) {
-        this.passengerDetails = passengerDetails;
+    public void addPassenger(Passenger passenger) {
+        if (passengerCount < passengers.length) {
+            passengers[passengerCount] = passenger;
+            passengerCount++;
+        } else {
+            System.out.println("No more passengers can be added.");
+        }
     }
 
-    public void displayDetails() {
-        System.out.println("Reservation ID: " + reservationID);
-        System.out.println("Flight: " + flight.getFlightNumber());
-        System.out.println("Passengers: " + Arrays.toString(passengerDetails));
+    public void printPassengerDetails() {
+        System.out.println("\nReservation Details for " + user.getFullName());
+        for (int i = 0; i < passengerCount; i++) {
+            System.out.println(passengers[i]);
+        }
     }
 }
