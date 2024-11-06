@@ -31,7 +31,7 @@ public class FlightBookingApp {
         System.out.print("Enter Last Name: ");
         String lastName = scanner.nextLine();
         
-        User user = new User(firstName + " " + lastName);
+        User user = new User(firstName, lastName);
         bookingSystem.setCurrentUser(user);
         showMenu();
     }
@@ -137,4 +137,4 @@ public class FlightBookingApp {
     private static void viewBooking() {
         bookingSystem.viewBooking();
     }
-}
+}            
