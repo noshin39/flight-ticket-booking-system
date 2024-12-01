@@ -9,7 +9,7 @@ public class UserManager {
         File file = new File(FILE_NAME);
         if (!file.exists()) {
             try {
-                file.createNewFile(); // Create file if it doesn't exist
+                file.createNewFile(); 
             } catch (IOException e) {
                 System.out.println("Error creating user data file.");
             }
@@ -37,7 +37,7 @@ public class UserManager {
 
     public boolean createUser(String username) {
         if (getUser(username) != null) {
-            return false; // Username already exists
+            return false; 
         }
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME, true))) {
