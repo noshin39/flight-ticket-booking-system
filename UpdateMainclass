@@ -12,7 +12,7 @@ public class FlightBookingApp {
             System.out.println("2. Exit");
             System.out.print("Select an option: ");
             int choice = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
+            scanner.nextLine(); 
 
             if (choice == 1) {
                 logIn();
@@ -45,7 +45,7 @@ public class FlightBookingApp {
             System.out.println("3. Log out");
             System.out.print("Select an option: ");
             int choice = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
+            scanner.nextLine(); 
 
             switch (choice) {
                 case 1 -> searchFlight();
@@ -71,7 +71,7 @@ public class FlightBookingApp {
         }
         System.out.print("Enter choice: ");
         int destinationChoice = scanner.nextInt();
-        scanner.nextLine(); // Consume newline
+        scanner.nextLine(); 
         String selectedDestination = destinations[destinationChoice - 1];
 
         System.out.println("\nSelect Date:");
@@ -80,7 +80,7 @@ public class FlightBookingApp {
         }
         System.out.print("Enter choice: ");
         int dateChoice = scanner.nextInt();
-        scanner.nextLine(); // Consume newline
+        scanner.nextLine(); 
         String selectedDate = dates[dateChoice - 1];
 
         System.out.println("\nSelect Time:");
@@ -89,13 +89,12 @@ public class FlightBookingApp {
         }
         System.out.print("Enter choice: ");
         int timeChoice = scanner.nextInt();
-        scanner.nextLine(); // Consume newline
+        scanner.nextLine(); 
         String selectedTime = times[timeChoice - 1];
 
         System.out.print("\nEnter number of people: ");
         int numberOfPeople = scanner.nextInt();
-        scanner.nextLine(); // Consume newline
-
+        scanner.nextLine(); 
         System.out.println("\nFlight Details:");
         System.out.println("Destination: " + selectedDestination);
         System.out.println("Date: " + selectedDate);
@@ -116,7 +115,7 @@ public class FlightBookingApp {
                     String name = scanner.nextLine();
                     System.out.print("Enter Age: ");
                     int age = scanner.nextInt();
-                    scanner.nextLine(); // Consume newline
+                    scanner.nextLine(); 
                     System.out.print("Enter Gender: ");
                     String gender = scanner.nextLine();
                     System.out.print("Enter Passport Number: ");
