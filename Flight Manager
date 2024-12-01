@@ -1,0 +1,54 @@
+package com.mycompany.flightsystem;
+
+public class FlightManager {
+    private static final String[] DESTINATIONS = {"Chittagong", "Khulna", "Sylhet", "Rajshahi", "Barishal"};
+    private static final String[] TIMES = {"8 AM", "2 PM", "8 PM"};
+    private int[][][] seats; 
+
+    public FlightManager() {
+        seats = new int[DESTINATIONS.length][TIMES.length][10];
+        for (int i = 0; i < DESTINATIONS.length; i++) {
+            for (int j = 0; j < TIMES.length; j++) {
+                for (int k = 0; k < 10; k++) {
+                    seats[i][j][k] = 1; 
+                }
+            }
+        }
+    }
+
+    public synchronized boolean bookFlight(String destination, String date, String time) {
+        int destIndex = getDestinationIndex(destination);
+        int timeIndex = getTimeIndex(time);
+
+        if (destIndex == -1 || timeIndex == -1) {
+            System.out.println("Invalid destination or time.");
+            return false;
+        }
+
+        for (int i = 0; i < seats[destIndex][timeIndex].length; i++) {
+            if (seats[destIndex][timeIndex][i] == 1) { 
+                seats[destIndex][timeIndex][i] = 0; 
+                return true;
+            }
+        }
+        return false; 
+    }
+
+    private int getDestinationIndex(String destination) {
+        for (int i = 0; i < DESTINATIONS.length; i++) {
+            if (DESTINATIONS[i].equalsIgnoreCase(destination)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private int getTimeIndex(String time) {
+        for (int i = 0; i < TIMES.length; i++) {
+            if (TIMES[i].equalsIgnoreCase(time)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+}
