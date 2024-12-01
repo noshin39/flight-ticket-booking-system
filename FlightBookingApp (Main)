@@ -1,0 +1,125 @@
+package com.mycompany.flightsystem;
+
+import java.util.Scanner;
+
+public class FlightBookingApp {
+    private static final FlightManager flightManager = new FlightManager();
+    private static final UserManager userManager = new UserManager();
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        while (true) {
+            System.out.println("Welcome to the Flight Booking System!");
+            System.out.println("1. Login");
+            System.out.println("2. Create Account");
+            System.out.println("3. Exit");
+            System.out.print("Enter your choice: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine(); 
+
+            switch (choice) {
+                case 1:
+                    loginUser(scanner);
+                    break;
+                case 2:
+                    createUser(scanner);
+                    break;
+                case 3:
+                    System.out.println("Thank you for using the Flight Booking System!");
+                    return;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        }
+    }
+
+    private static void loginUser(Scanner scanner) {
+        System.out.print("Enter your username: ");
+        String username = scanner.nextLine();
+        User user = userManager.getUser(username);
+
+        if (user != null) {
+            mainMenu(scanner, user);
+        } else {
+            System.out.println("User not found. Please create an account first.");
+        }
+    }
+
+    private static void createUser(Scanner scanner) {
+        System.out.print("Enter a username: ");
+        String username = scanner.nextLine();
+
+        if (userManager.createUser(username)) {
+            System.out.println("Account created successfully! Please login.");
+        } else {
+            System.out.println("Username already exists. Please choose a different username.");
+        }
+    }
+
+    private static void mainMenu(Scanner scanner, User user) {
+        while (true) {
+            System.out.println("\nMain Menu:");
+            System.out.println("1. Search Flights");
+            System.out.println("2. View Bookings");
+            System.out.println("3. Logout");
+            System.out.print("Enter your choice: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine(); 
+
+            switch (choice) {
+                case 1:
+                    searchFlights(scanner, user);
+                    break;
+                case 2:
+                    viewBookings(user);
+                    break;
+                case 3:
+                    System.out.println("Logging out...");
+                    return;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        }
+    }
+
+    private static void searchFlights(Scanner scanner, User user) {
+        System.out.println("Available Destinations: Chittagong, Khulna, Sylhet, Rajshahi, Barishal");
+        System.out.print("Enter destination: ");
+        String destination = scanner.nextLine();
+
+        System.out.print("Enter date (dd/mm/yyyy): ");
+        String date = scanner.nextLine();
+
+        System.out.println("Available Times: 8 AM, 2 PM, 8 PM");
+        System.out.print("Enter time: ");
+        String time = scanner.nextLine();
+
+        synchronized (flightManager) {
+            boolean booked = flightManager.bookFlight(destination, date, time);
+            if (booked) {
+                Booking booking = new Booking(destination, date, time);
+                user.addBooking(booking);
+                userManager.saveUser(user);
+                System.out.println("Booking successful!");
+            } else {
+                System.out.println("No available seats for this flight.");
+            }
+        }
+    }
+
+    private static void viewBookings(User user) {
+        Booking[] bookings = user.getBookings();
+        if (bookings[0] == null) {
+            System.out.println("No bookings found.");
+            return;
+        }
+
+        System.out.println("Your Bookings:");
+        for (Booking booking : bookings) {
+            if (booking != null) {
+                System.out.println(booking);
+            }
+        }
+    }
+}
