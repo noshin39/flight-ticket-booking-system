@@ -1,21 +1,29 @@
+
 public class User {
-    private String firstName;
-    private String lastName;
+    private String username;
+    private Booking[] bookings;
+    private static final int MAX_BOOKINGS = 10;
 
-    public User(String firstName, String lastName) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public User(String username) {
+        this.username = username;
+        this.bookings = new Booking[MAX_BOOKINGS];
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getUsername() {
+        return username;
     }
 
-    public String getLastName() {
-        return lastName;
+    public boolean addBooking(Booking booking) {
+        for (int i = 0; i < bookings.length; i++) {
+            if (bookings[i] == null) {
+                bookings[i] = booking;
+                return true;
+            }
+        }
+        return false; 
     }
 
-    public String getFullName() {
-        return firstName + " " + lastName;
+    public Booking[] getBookings() {
+        return bookings;
     }
 }
