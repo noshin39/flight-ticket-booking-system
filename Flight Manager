@@ -1,54 +1,73 @@
 package com.mycompany.flightsystem;
 
+
 public class FlightManager {
-    private static final String[] DESTINATIONS = {"Chittagong", "Khulna", "Sylhet", "Rajshahi", "Barishal"};
-    private static final String[] TIMES = {"8 AM", "2 PM", "8 PM"};
-    private int[][][] seats; 
+    private static final int MAX_SEATS = 10;  
+    private int[][][] seats;  
+
+    String[] destinations = {"Chittagong", "Rajshahi", "Khulna", "Shylet", "Barishal"};
+    String[] times = {"8am", "2pm", "8pm"};
+    String[] dates = {"01/01/2025", "08/01/2025", "20/01/2025", "02/02/2025", "10/02/2025"};
 
     public FlightManager() {
-        seats = new int[DESTINATIONS.length][TIMES.length][10];
-        for (int i = 0; i < DESTINATIONS.length; i++) {
-            for (int j = 0; j < TIMES.length; j++) {
-                for (int k = 0; k < 10; k++) {
-                    seats[i][j][k] = 1; 
+        seats = new int[destinations.length][times.length][dates.length];
+        initializeSeats();
+    }
+
+    private void initializeSeats() {
+        for (int i = 0; i < destinations.length; i++) {
+            for (int j = 0; j < times.length; j++) {
+                for (int k = 0; k < dates.length; k++) {
+                    seats[i][j][k] = MAX_SEATS;
                 }
             }
         }
     }
 
-    public synchronized boolean bookFlight(String destination, String date, String time) {
-        int destIndex = getDestinationIndex(destination);
+    public synchronized boolean bookFlight(String destination, String time, String date) {
+        int destinationIndex = getDestinationIndex(destination);
         int timeIndex = getTimeIndex(time);
+        int dateIndex = getDateIndex(date);
 
-        if (destIndex == -1 || timeIndex == -1) {
-            System.out.println("Invalid destination or time.");
+        if (destinationIndex == -1 || timeIndex == -1 || dateIndex == -1) {
+            System.out.println("Invalid destination, time, or date.");
             return false;
         }
 
-        for (int i = 0; i < seats[destIndex][timeIndex].length; i++) {
-            if (seats[destIndex][timeIndex][i] == 1) { 
-                seats[destIndex][timeIndex][i] = 0; 
-                return true;
-            }
+        if (seats[destinationIndex][timeIndex][dateIndex] > 0) {
+            seats[destinationIndex][timeIndex][dateIndex]--;  
+            System.out.println("Booking successful for " + destination + " at " + time + " on " + date);
+            return true;
+        } else {
+            System.out.println("No seats available for " + destination + " at " + time + " on " + date);
+            return false;
         }
-        return false; 
     }
 
     private int getDestinationIndex(String destination) {
-        for (int i = 0; i < DESTINATIONS.length; i++) {
-            if (DESTINATIONS[i].equalsIgnoreCase(destination)) {
+        for (int i = 0; i < destinations.length; i++) {
+            if (destinations[i].equalsIgnoreCase(destination)) {
                 return i;
             }
         }
-        return -1;
+        return -1; 
     }
 
     private int getTimeIndex(String time) {
-        for (int i = 0; i < TIMES.length; i++) {
-            if (TIMES[i].equalsIgnoreCase(time)) {
+        for (int i = 0; i < times.length; i++) {
+            if (times[i].equalsIgnoreCase(time)) {
                 return i;
             }
         }
-        return -1;
+        return -1; 
+    }
+
+    private int getDateIndex(String date) {
+        for (int i = 0; i < dates.length; i++) {
+            if (dates[i].equalsIgnoreCase(date)) {
+                return i;
+            }
+        }
+        return -1;  
     }
 }
